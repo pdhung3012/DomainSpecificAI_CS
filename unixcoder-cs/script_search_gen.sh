@@ -1,13 +1,14 @@
+lang=javascript
 folder=javascript
-pathTrainTestData=../../../../Desktop/AugRep_local/QueryPlus_RP/data/models/codesearch/ast/$folder
-mkdir -p $pathTrainTestData/eval_uni/
+pathTrainTestData="../../datasets_models_unixcoder/"
+mkdir -p $pathTrainTestData/eval_uni_test/$lang
 python finetune_search_gen.py \
-    --output_dir $pathTrainTestData/eval_uni/$folder/ \
+    --output_dir $pathTrainTestData/eval_uni_test/$folder/ \
     --model_name_or_path microsoft/unixcoder-base  \
-    --output_vector_model=$pathTrainTestData/../vectors/ \
+    --output_vector_model=$pathTrainTestData/vectors/ \
     --do_test \
-    --test_data_file $pathTrainTestData/test.jsonl \
-    --codebase_file $pathTrainTestData/codebase.jsonl \
+    --test_data_file $pathTrainTestData/datasets/$lang/test.jsonl \
+    --codebase_file $pathTrainTestData/datasets/$lang/codebase.jsonl \
     --num_train_epochs 30 \
     --code_length 256 \
     --nl_length 128 \

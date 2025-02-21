@@ -27,7 +27,7 @@ import random
 import torch
 import json
 import numpy as np
-from model_codesearch import Model
+from model import Model
 from torch.nn import CrossEntropyLoss, MSELoss
 from torch.utils.data import DataLoader, Dataset, SequentialSampler, RandomSampler, TensorDataset
 from transformers import (WEIGHTS_NAME, AdamW, get_linear_schedule_with_warmup,
@@ -272,38 +272,38 @@ def evaluate(args, model, tokenizer, file_name, eval_when_training=False):
     dictQueryAndCandidateEmb['candidates'] = dictCands
     pickle.dump(dictQueryAndCandidateEmb, open(fpOutputElement, 'wb'))
 
-    # scores = np.matmul(nl_vecs,code_vecs.T)
-    #
-    # sort_ids = np.argsort(scores, axis=-1, kind='quicksort', order=None)[:,::-1]
-    #
-    # nl_urls = []
-    # code_urls = []
-    # for example in query_dataset.examples:
-    #     nl_urls.append(example.url)
-    #
-    # for example in code_dataset.examples:
-    #     code_urls.append(example.url)
-    #
-    # ranks = []
-    # for url, sort_id in zip(nl_urls,sort_ids):
-    #     rank = 0
-    #     find = False
-    #     for idx in sort_id[:1000]:
-    #         if find is False:
-    #             rank += 1
-    #         if code_urls[idx] == url:
-    #             find = True
-    #     if find:
-    #         ranks.append(1/rank)
-    #     else:
-    #         ranks.append(0)
-    #
-    # result = {
-    #     "eval_mrr":float(np.mean(ranks))
-    # }
+    scores = np.matmul(nl_vecs,code_vecs.T)
+
+    sort_ids = np.argsort(scores, axis=-1, kind='quicksort', order=None)[:,::-1]
+
+    nl_urls = []
+    code_urls = []
+    for example in query_dataset.examples:
+        nl_urls.append(example.url)
+
+    for example in code_dataset.examples:
+        code_urls.append(example.url)
+
+    ranks = []
+    for url, sort_id in zip(nl_urls,sort_ids):
+        rank = 0
+        find = False
+        for idx in sort_id[:1000]:
+            if find is False:
+                rank += 1
+            if code_urls[idx] == url:
+                find = True
+        if find:
+            ranks.append(1/rank)
+        else:
+            ranks.append(0)
+
     result = {
-        "eval_mrr": float(np.mean(0))
+        "eval_mrr":float(np.mean(ranks))
     }
+    # result = {
+    #     "eval_mrr": float(np.mean(0))
+    # }
 
     return result
 

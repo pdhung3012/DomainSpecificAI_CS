@@ -2,7 +2,7 @@ lang=javascript
 pathTrainTestData="../../datasets_models_unixcoder/"
 mkdir -p $pathTrainTestData/eval_uni_test/$lang/
 python finetune_search_train.py \
-    --output_dir $pathTrainTestData/eval_uni_test/ \
+    --output_dir $pathTrainTestData/eval_uni_test/$lang/ \
     --model_name_or_path microsoft/unixcoder-base  \
     --do_train \
     --train_data_file $pathTrainTestData/datasets/$lang/train.jsonl \
